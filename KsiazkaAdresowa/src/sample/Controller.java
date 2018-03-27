@@ -1,12 +1,26 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class Controller {
@@ -17,12 +31,18 @@ public class Controller {
     Label label;
     @FXML
     TextField textField;
+    @FXML
+    FileChooser fileChooser;
+    @FXML
+    ListView<String> listView;
 
     public Controller() {
 
         textField = new TextField();
         label = new Label();
         button = new Button();
+        listView = new ListView<>();
+
 
     }
 
@@ -100,5 +120,56 @@ public class Controller {
         } else {
             System.out.println("Poprawny numer");
         }
+    }
+
+    public void handleReadFile(ActionEvent actionEvent) throws IOException {
+
+        FileReader fileReader = new FileReader("temp.txt");
+
+        ArrayList<String> resultFile = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(fileReader);
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            resultFile.add(line);
+            System.out.println(line);
+        }
+
+        textField.setText(resultFile.get(resultFile.size() - 1));
+
+
+        ObservableList<String> items = FXCollections.observableArrayList();
+        items.addAll(resultFile);
+        listView.setItems(items);
+
+
+    }
+
+    public void saveToFile(ActionEvent actionEvent) throws IOException {
+
+        List<String> lines = Arrays.asList("sa", "vv");
+        Path file = Paths.get("temp.txt");
+        FileReader fileReader = new FileReader("temp.txt");
+
+        ArrayList<String> resultFile = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(fileReader);
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            resultFile.add(line);
+            System.out.println(line);
+        }
+        resultFile.add(textField.getText());
+        listView.getItems().add(textField.getText());
+
+        Files.write(file, resultFile, Charset.forName("UTF-8"));
+    }
+
+    public void handleTest(ActionEvent actionEvent) {
+        System.out.println("test");
+
+        ObservableList<String> items = FXCollections.observableArrayList(
+                "A", "B", "C", "D");
+        listView.setItems(items);
     }
 }
