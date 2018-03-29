@@ -61,6 +61,7 @@ public class Controller {
             if (sum % 10 == 0) {
                 label.setText("Poprawny numer karty kredytowej");
                 label.setStyle("-fx-background-color: green");
+                listView.getItems().add(textField.getText());
             } else {
                 label.setText("Bledny numer karty kredytowej");
                 label.setStyle("-fx-background-color: red");
