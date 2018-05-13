@@ -22,12 +22,10 @@
                 text="Sprawdź" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
         <TextField fx:id="textField" onKeyTyped="#validate" GridPane.rowIndex="2"/>
         <Label fx:id="label" prefHeight="23.0" prefWidth="198.0" GridPane.rowIndex="4"/>
-        <Button fx:id="readFile" disable="true" mnemonicParsing="false" onAction="#handleReadFile" prefHeight="25.0"
-                prefWidth="200.0" text="Wczytaj numery kont z pliku" GridPane.rowIndex="1"/>
-        <Button fx:id="save" disable="true" mnemonicParsing="false" onAction="#saveToFile" prefHeight="25.0"
-                prefWidth="103.0" text="Dodaj od listy" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+        <Button fx:id="readFile" mnemonicParsing="false" onAction="#handleReadFile" prefHeight="25.0" prefWidth="200.0"
+                text="Wczytaj numery kont z pliku" GridPane.rowIndex="1"/>
         <Button id="test" fx:id="test" disable="true" mnemonicParsing="false" onAction="#handleTest" text="Test"
-                GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+                visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
         <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5"/>
     </children>
 </GridPane>
