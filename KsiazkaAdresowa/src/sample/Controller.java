@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.FileChooser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,8 +25,6 @@ public class Controller {
     @FXML
     TextField textField;
     @FXML
-    FileChooser fileChooser;
-    @FXML
     ListView<String> listView;
 
     public Controller() {
@@ -36,35 +33,56 @@ public class Controller {
         label = new Label();
         button = new Button();
         listView = new ListView<>();
-
-
     }
-
 
     public void checkCreditNumber(javafx.event.ActionEvent actionEvent) {
         System.out.println("checking Credit Number");
 
-        if (textField.getText().matches("^[0-9]+$")) {
+        checkCreditNumberFromInput(textField.getText());
+    }
 
-            char[] numberCard = textField.getText().toCharArray();
+    private void checkCreditNumberFromInput(String number) {
+        if (number.matches("^[0-9]+$")) {
+
+            char[] numberCard = number.toCharArray();
             ArrayList<Integer> numbers;
             numbers = charToArray(numberCard);
             ArrayList<Integer> numbersAfterMulti = new ArrayList<>();
             Integer sum = multiToWeight(numbers);
 
             if (sum % 10 == 0) {
+                ArrayList<String> resultFile = new ArrayList<>();
+                resultFile.add(number);
+                ObservableList<String> items = FXCollections.observableArrayList();
+                items.addAll(resultFile);
+                listView.setItems(items);
                 label.setText("Poprawny numer karty kredytowej");
-                label.setStyle("-fx-background-color: green");
-                listView.getItems().add(textField.getText());
             } else {
                 label.setText("Bledny numer karty kredytowej");
-                label.setStyle("-fx-background-color: red");
             }
-
         } else {
             System.out.println("blad walidacji//Bledny numer");
             label.setText("Bledny numer karty kredytowej");
             label.setStyle("-fx-background-color: red");
+        }
+    }
+
+    private void checkCreditNumberFromFile(String number) {
+        if (number.matches("^[0-9]+$")) {
+
+            char[] numberCard = number.toCharArray();
+            ArrayList<Integer> numbers;
+            numbers = charToArray(numberCard);
+            ArrayList<Integer> numbersAfterMulti = new ArrayList<>();
+            Integer sum = multiToWeight(numbers);
+
+            if (sum % 10 == 0) {
+                ArrayList<String> resultFile = new ArrayList<>();
+                resultFile.add(number);
+                ObservableList<String> items = FXCollections.observableArrayList();
+                items.addAll(resultFile);
+                listView.setItems(items);
+            }
         }
     }
 
@@ -103,14 +121,11 @@ public class Controller {
         return listNumbers;
     }
 
-
     public void validate(KeyEvent event) {
         String content = event.getCharacter();
 
-        System.out.println("validation");
+        System.err.println("validation");
         if (!textField.getText().matches("^[0-9]+$")) {
-            //when it not matches the pattern (1.0 - 6.0)
-            //set the textField empty
             System.out.println("bledny numer");
         } else {
             System.out.println("Poprawny numer");
@@ -119,25 +134,25 @@ public class Controller {
 
     public void handleReadFile(ActionEvent actionEvent) throws IOException {
 
-        FileReader fileReader = new FileReader("temp.txt");
+        BufferedReader reader = null;
+        try {
+            FileReader fileReader = new FileReader("temp.txt");
 
-        ArrayList<String> resultFile = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(fileReader);
+            ArrayList<String> resultFile = new ArrayList<>();
+            reader = new BufferedReader(fileReader);
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            resultFile.add(line);
-            System.out.println(line);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                checkCreditNumberFromFile(line);
+                System.out.println(line);
+            }
+
+            textField.setText(resultFile.get(resultFile.size() - 1));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            reader.close();
         }
-
-        textField.setText(resultFile.get(resultFile.size() - 1));
-
-
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll(resultFile);
-        listView.setItems(items);
-
-
     }
 
     public void handleTest(ActionEvent actionEvent) {
@@ -145,6 +160,5 @@ public class Controller {
 
         ObservableList<String> items = FXCollections.observableArrayList(
                 "A", "B", "C", "D");
-        listView.setItems(items);
     }
 }
