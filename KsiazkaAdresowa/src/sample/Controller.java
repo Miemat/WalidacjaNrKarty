@@ -147,9 +147,9 @@ public class Controller {
                 }
                 System.out.println(line);
             }
-            listView.setItems(items);
-
-            textField.setText(resultFile.get(resultFile.size() - 1));
+            if (items != null) {
+                listView.setItems(items);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
