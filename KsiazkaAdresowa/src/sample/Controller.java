@@ -67,7 +67,7 @@ public class Controller {
         }
     }
 
-    private void checkCreditNumberFromFile(String number) {
+    private boolean checkCreditNumberFromFile(String number) {
         if (number.matches("^[0-9]+$")) {
 
             char[] numberCard = number.toCharArray();
@@ -77,13 +77,11 @@ public class Controller {
             Integer sum = multiToWeight(numbers);
 
             if (sum % 10 == 0) {
-                ArrayList<String> resultFile = new ArrayList<>();
-                resultFile.add(number);
-                ObservableList<String> items = FXCollections.observableArrayList();
-                items.addAll(resultFile);
-                listView.setItems(items);
+
+                return true;
             }
         }
+        return false;
     }
 
     private Integer multiToWeight(ArrayList<Integer> numbers) {
@@ -140,12 +138,16 @@ public class Controller {
 
             ArrayList<String> resultFile = new ArrayList<>();
             reader = new BufferedReader(fileReader);
-
             String line;
+            ObservableList<String> items = FXCollections.observableArrayList();
             while ((line = reader.readLine()) != null) {
-                checkCreditNumberFromFile(line);
+
+                if (checkCreditNumberFromFile(line)) {
+                    items.add(line);
+                }
                 System.out.println(line);
             }
+            listView.setItems(items);
 
             textField.setText(resultFile.get(resultFile.size() - 1));
         } catch (Exception e) {
